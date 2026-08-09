@@ -11,6 +11,16 @@ app.use(express.json());
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL
 });
+pool.query(`
+    CREATE TABLE IF NOT EXISTS skill_entries (
+        id SERIAL PRIMARY KEY,
+        student_name VARCHAR(255) NOT NULL,
+        skill_name VARCHAR(255) NOT NULL,
+        skill_level VARCHAR(50) NOT NULL
+    )
+`)
+.then(() => console.log("skill_entries table ready"))
+.catch((error) => console.error("Table creation error:", error));
 app.get("/", (req, res) => {
     res.json({ message: "CSE Skill Tracker Backend is running!" });
 });
