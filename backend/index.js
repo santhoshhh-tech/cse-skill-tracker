@@ -15,6 +15,25 @@ app.get("/", (req, res) => {
     res.json({ message: "CSE Skill Tracker Backend is running!" });
 });
 
+
+// GET all saved skills
+app.get("/api/skills", async (req, res) => {
+    try {
+        const result = await pool.query(
+            "SELECT * FROM skill_entries ORDER BY id DESC"
+        );
+
+        res.json(result.rows);
+    } catch (error) {
+        console.error("Error fetching skills:", error);
+
+        res.status(500).json({
+            error: "Failed to fetch skills"
+        });
+    }
+});
+
+
 pool.connect()
     .then(() => console.log("PostgreSQL connected successfully"))
     .catch((err) => console.error("Database connection error:", err));
