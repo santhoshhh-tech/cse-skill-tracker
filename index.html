@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CSE Skill Tracker</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #222;
+        }
+
+        header {
+            background: #1e3a8a;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin-bottom: 8px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 30px auto;
+        }
+
+        .status {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .status span {
+            font-weight: bold;
+        }
+
+        .form-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+        }
+
+        .form-card h2 {
+            margin-bottom: 20px;
+            color: #1e3a8a;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0 15px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+        }
+
+        button {
+            background: #1e3a8a;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        button:hover {
+            background: #162d6b;
+        }
+
+        .skills {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .skill-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .skill-card h3 {
+            color: #1e3a8a;
+            margin-bottom: 10px;
+        }
+
+        .progress {
+            width: 100%;
+            height: 10px;
+            background: #ddd;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #22c55e;
+            border-radius: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            margin-top: 30px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>🎓 CSE Skill Tracker</h1>
+    <p>Track and improve your Computer Science skills</p>
+</header>
+
+<div class="container">
+
+    <!-- Backend Status -->
+    <div class="status">
+        <h2>Backend Status</h2>
+        <p id="backendStatus">Checking backend...</p>
+    </div>
+
+    <!-- Add Skill -->
+    <div class="form-card">
+        <h2>Add Your Skill</h2>
+
+        <label>Student Name</label>
+        <input type="text" id="studentName" placeholder="Enter your name">
+
+        <label>Skill Name</label>
+        <input type="text" id="skillName" placeholder="Example: Python">
+
+        <label>Skill Level</label>
+        <select id="skillLevel">
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced</option>
+            <option value="Expert">Expert</option>
+        </select>
+
+        <button onclick="addSkill()">Add Skill</button>
+    </div>
+
+    <!-- Skills -->
+    <h2 style="margin-bottom:20px;">My Skills</h2>
+
+    <div class="skills" id="skillsContainer">
+
+        <div class="skill-card">
+            <h3>Python</h3>
+            <p>Level: Intermediate</p>
+
+            <div class="progress">
+                <div class="progress-bar" style="width:60%;"></div>
+            </div>
+
+            <p>Progress: 60%</p>
+        </div>
+
+        <div class="skill-card">
+            <h3>C++</h3>
+            <p>Level: Beginner</p>
+
+            <div class="progress">
+                <div class="progress-bar" style="width:30%;"></div>
+            </div>
+
+            <p>Progress: 30%</p>
+        </div>
+
+        <div class="skill-card">
+            <h3>Java</h3>
+            <p>Level: Intermediate</p>
+
+            <div class="progress">
+                <div class="progress-bar" style="width:55%;"></div>
+            </div>
+
+            <p>Progress: 55%</p>
+        </div>
+
+    </div>
+
+</div>
+
+<footer>
+    <p>© 2026 CSE Skill Tracker</p>
+</footer>
+
+<script>
+
+    // Check whether our Node.js backend is running
+    fetch("http://localhost:5000")
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("backendStatus").innerHTML =
+                "🟢 Connected — " + data.message;
+        })
+        .catch(error => {
+            document.getElementById("backendStatus").innerHTML =
+                "🔴 Backend is not connected";
+        });
+
+
+    // Add skill to the page
+    function addSkill() {
+
+        const studentName =
+            document.getElementById("studentName").value;
+
+        const skillName =
+            document.getElementById("skillName").value;
+
+        const skillLevel =
+            document.getElementById("skillLevel").value;
+
+        if (studentName === "" || skillName === "") {
+            alert("Please enter student name and skill name.");
+            return;
+        }
+fetch("http://localhost:5000/api/skills", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+        studentName: studentName,
+        skillName: skillName,
+        skillLevel: skillLevel
+    })
+})
+.then(response => response.json())
+.then(data => {
+    console.log("Saved to database:", data);
+})
+.catch(error => {
+    console.error("Database error:", error);
+});
+
+        let progress = 25;
+
+        if (skillLevel === "Intermediate") {
+            progress = 50;
+        }
+
+        if (skillLevel === "Advanced") {
+            progress = 75;
+        }
+
+        if (skillLevel === "Expert") {
+            progress = 100;
+        }
+
+        const card = document.createElement("div");
+
+        card.className = "skill-card";
+
+        card.innerHTML = `
+            <h3>${skillName}</h3>
+            <p>Student: ${studentName}</p>
+            <p>Level: ${skillLevel}</p>
+
+            <div class="progress">
+                <div class="progress-bar"
+                     style="width:${progress}%;">
+                </div>
+            </div>
+
+            <p>Progress: ${progress}%</p>
+        `;
+
+        document.getElementById("skillsContainer")
+            .appendChild(card);
+
+        document.getElementById("studentName").value = "";
+        document.getElementById("skillName").value = "";
+    }
+
+</script>
+
+</body>
+</html>
