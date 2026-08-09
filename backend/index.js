@@ -20,8 +20,8 @@ app.get("/", (req, res) => {
 app.get("/api/skills", async (req, res) => {
     try {
         const result = await pool.query(
-            "SELECT * FROM skill_entries ORDER BY id DESC"
-        );
+    "SELECT * FROM skill_entries"
+);
 
         res.json(result.rows);
     } catch (error) {
