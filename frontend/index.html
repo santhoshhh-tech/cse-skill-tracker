@@ -209,7 +209,7 @@
 <script>
 
     // Check whether our Node.js backend is running
-    fetch("http://localhost:5000")
+    fetch("https://cse-skill-tracker.onrender.com")
         .then(response => response.json())
         .then(data => {
             document.getElementById("backendStatus").innerHTML =
@@ -237,7 +237,7 @@
             alert("Please enter student name and skill name.");
             return;
         }
-fetch("http://localhost:5000/api/skills", {
+fetch("https://cse-skill-tracker.onrender.com/api/skills", {
     method: "POST",
     headers: {
         "Content-Type": "application/json"
