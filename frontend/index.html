@@ -294,6 +294,61 @@ fetch("https://cse-skill-tracker.onrender.com/api/skills", {
         document.getElementById("studentName").value = "";
         document.getElementById("skillName").value = "";
     }
+    // Load saved skills from PostgreSQL
+function loadSkills() {
+    fetch("https://cse-skill-tracker.onrender.com/api/skills")
+        .then(response => response.json())
+        .then(skills => {
+
+            const container = document.getElementById("skillsContainer");
+
+            // Keep the default cards or clear them
+            container.innerHTML = "";
+
+            skills.forEach(skill => {
+
+                let progress = 25;
+
+                if (skill.skill_level === "Intermediate") {
+                    progress = 50;
+                }
+
+                if (skill.skill_level === "Advanced") {
+                    progress = 75;
+                }
+
+                if (skill.skill_level === "Expert") {
+                    progress = 100;
+                }
+
+                const card = document.createElement("div");
+
+                card.className = "skill-card";
+
+                card.innerHTML = `
+                    <h3>${skill.skill_name}</h3>
+                    <p>Student: ${skill.student_name}</p>
+                    <p>Level: ${skill.skill_level}</p>
+
+                    <div class="progress">
+                        <div class="progress-bar"
+                             style="width:${progress}%;">
+                        </div>
+                    </div>
+
+                    <p>Progress: ${progress}%</p>
+                `;
+
+                container.appendChild(card);
+            });
+        })
+        .catch(error => {
+            console.error("Error loading skills:", error);
+        });
+}
+
+// Load skills when page opens
+loadSkills();
 
 </script>
 
